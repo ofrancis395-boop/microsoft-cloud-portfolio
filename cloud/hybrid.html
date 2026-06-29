@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 2: Hybrid Directory Synchronization | Francis Otoo</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Phase 2: Hybrid Directory Synchronization</h1>
+    <button class="mobile-menu-button" onclick="toggleMobileMenu()">
+    ☰ Menu
+</button>
+    <nav id="mainNav">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About Me</a>
+        <a href="../hybrid-identity-transformation.html">Hybrid Identity</a>
+        <a href="../iam-transformation.html">IAM</a>
+        <a href="powershell.html">Automation</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+</header>
+
+<aside class="toc hybrid-toc">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#phase-overview">1. Phase Overview</a></li>
+        <li><a href="#implementation-steps">2. Implementation Steps</a></li>
+        <li><a href="#technical-evidence">3. Technical Evidence</a></li>
+        <li><a href="#validation">4. Validation</a></li>
+        <li><a href="#phase-takeaways">5. Phase Takeaways</a></li>
+    </ul>
+</aside>
+
+<main class="container">
+
+    <section id="phase-overview">
+        <p class="case-study-label">SUPPORTING IMPLEMENTATION EVIDENCE</p>
+
+        <h2>1. Phase Overview</h2>
+
+        <div class="project-meta">
+            <p><strong>Parent Case Study:</strong> Hybrid Identity Transformation</p>
+            <p><strong>Business Scenario:</strong> SweetCrust Bakery Ltd — Hybrid Directory Synchronization</p>
+            <p><strong>Phase:</strong> Phase 2 of 3</p>
+            <p><strong>Technologies:</strong> Microsoft Entra Connect Sync, AD DS, Microsoft Entra ID, Hybrid Join, Seamless SSO</p>
+            <p><strong>Role Alignment:</strong> Systems Administrator | IAM Analyst | Microsoft 365 Administrator | Hybrid Cloud Administrator</p>
+        </div>
+
+        <p>
+            This phase extends SweetCrust Bakery Ltd’s on-premises Active Directory environment into
+            Microsoft Entra ID using Microsoft Entra Connect Sync. It connects traditional AD DS identities
+            to Microsoft cloud identity services while preserving the existing on-premises identity foundation.
+        </p>
+
+        <p>
+            The purpose of this phase is to synchronize users, groups, and device identity information from
+            the on-premises directory into Microsoft Entra ID. This enables Microsoft 365 access, hybrid identity,
+            future Intune endpoint management, and centralized cloud-based identity visibility.
+        </p>
+
+        <p>
+            This phase builds directly on Phase 1: On-Premises Identity Foundation and prepares SweetCrust Bakery Ltd
+            for Phase 3: Modern Endpoint Management.
+        </p>
+    </section>
+
+    <section id="implementation-steps">
+        <h2>2. Implementation Steps</h2>
+
+        <h3>Implementation Area 1 — Prepare On-Premises Active Directory</h3>
+        <p>
+            Before installing Microsoft Entra Connect Sync, the on-premises Active Directory environment was
+            validated to confirm directory health, DNS resolution, UPN suffix readiness, time synchronization,
+            and domain controller status. These checks reduce the risk of synchronization failures after hybrid
+            identity is introduced.
+        </p>
+
+        <h4>Task 1.1 — Verify Domain and Forest Functional Levels</h4>
+        <p>
+            The domain and forest functional levels were verified to ensure compatibility with Microsoft Entra
+            Connect Sync. This confirmed that SweetCrust Bakery Ltd’s AD DS environment could support hybrid
+            identity synchronization.
+        </p>
+        <img src="../assets/images/H1-functional-levels.png" class="lab-img" alt="Domain and forest functional levels">
+        <p>
+            <strong>Evidence:</strong> The domain and forest functional levels were validated before synchronization,
+            confirming the on-premises directory was ready for Microsoft Entra Connect integration.
+        </p>
+
+        <h4>Task 1.2 — Verify Domain Controller Health</h4>
+        <p>
+            Domain controller health was validated using diagnostic commands. Because this lab used a single
+            domain controller, replication output correctly reflected no additional replication partners.
+        </p>
+        <img src="../assets/images/H1-dcdiag.png" class="lab-img" alt="Domain controller diagnostic output">
+        <img src="../assets/images/H1-repadmin.png" class="lab-img" alt="Repadmin replication summary">
+        <p>
+            <strong>Evidence:</strong> Domain controller diagnostic checks confirmed the AD DS environment was healthy.
+            The replication output was expected for a single-domain-controller lab and did not indicate a fault.
+        </p>
+
+        <h4>Task 1.3 — Verify DNS Resolution</h4>
+        <p>
+            DNS resolution was tested for internal domain names, the domain controller hostname, and external
+            Microsoft cloud endpoints. DNS is critical because Microsoft Entra Connect depends on name resolution
+            for both AD DS and Microsoft cloud services.
+        </p>
+        <img src="../assets/images/H1-dns-test1.png" class="lab-img" alt="DNS resolution test one">
+        <img src="../assets/images/H1-dns-test2.png" class="lab-img" alt="DNS resolution test two">
+        <p>
+            <strong>Evidence:</strong> Internal and external DNS resolution worked correctly, confirming that the
+            domain controller and Microsoft cloud services could be located during synchronization.
+        </p>
+
+        <h4>Task 1.4 — Create Entra Connect Sync Account</h4>
+        <p>
+            A dedicated synchronization account named <code>entra_sync</code> was created for Entra Connect
+            operations. Using a dedicated account improves administrative separation and makes synchronization
+            activity easier to identify.
+        </p>
+        <img src="../assets/images/H1-sync-account.png" class="lab-img" alt="Entra Connect sync account">
+        <p>
+            <strong>Evidence:</strong> A dedicated Entra Connect synchronization account was created to support
+            controlled hybrid identity operations for SweetCrust Bakery Ltd.
+        </p>
+
+        <h4>Task 1.5 — Verify Time Synchronization</h4>
+        <p>
+            Time synchronization was checked to reduce authentication and synchronization issues between the
+            on-premises directory and Microsoft cloud services. Time drift can affect authentication tokens,
+            Kerberos, and trust relationships.
+        </p>
+        <img src="../assets/images/H1-time-sync.png" class="lab-img" alt="Time synchronization verification">
+        <p>
+            <strong>Evidence:</strong> Time synchronization was validated before Entra Connect installation, reducing
+            the risk of authentication and synchronization errors.
+        </p>
+
+        <h4>Task 1.6 — Verify UPN Suffix</h4>
+        <p>
+            The UPN suffix was verified to ensure user identities would align correctly with Microsoft Entra ID.
+            This is important because cloud sign-in depends on clean and consistent user principal names.
+        </p>
+        <img src="../assets/images/H1-upn-suffix.png" class="lab-img" alt="UPN suffix verification">
+        <p>
+            <strong>Evidence:</strong> UPN readiness was validated to support consistent user sign-in identity between
+            AD DS and Microsoft Entra ID.
+        </p>
+
+        <h3>Implementation Area 2 — Install Microsoft Entra Connect Sync</h3>
+        <p>
+            Microsoft Entra Connect Sync was installed and configured to connect the on-premises AD DS environment
+            to Microsoft Entra ID. This created the hybrid identity bridge between SweetCrust Bakery Ltd’s local
+            domain and its Microsoft 365 cloud tenant.
+        </p>
+
+        <h4>Task 2.1 — Download Entra Connect Installer</h4>
+        <p>
+            The Microsoft Entra Connect installer was downloaded to the server so the hybrid synchronization
+            configuration could be installed locally.
+        </p>
+        <img src="../assets/images/H2-download.png" class="lab-img" alt="Download Entra Connect installer">
+
+        <h4>Task 2.2 — Launch the Installer</h4>
+        <p>
+            The Entra Connect installer was launched to begin the hybrid identity configuration workflow.
+        </p>
+        <img src="../assets/images/H2-install-start.png" class="lab-img" alt="Launch Entra Connect installer">
+
+        <h4>Task 2.3 — Connect to Microsoft Entra ID</h4>
+        <p>
+            The installer was connected to Microsoft Entra ID using cloud administrator credentials.
+            This allowed the synchronization tool to register with the tenant and prepare cloud-side identity synchronization.
+        </p>
+        <img src="../assets/images/H2-signin.png" class="lab-img" alt="Connect to Microsoft Entra ID">
+        <p>
+            <strong>Evidence:</strong> Microsoft Entra Connect successfully connected to the cloud tenant, establishing
+            the cloud-side trust required for synchronization.
+        </p>
+
+        <h4>Task 2.4 — Connect to Active Directory Domain Services</h4>
+        <p>
+            The on-premises Active Directory forest was connected to the Entra Connect configuration.
+            This linked the local AD DS identity source to Microsoft Entra ID.
+        </p>
+        <img src="../assets/images/H2-ad-connect.png" class="lab-img" alt="Connect to AD DS">
+        <img src="../assets/images/H2-ad-connected.png" class="lab-img" alt="AD DS connected">
+        <p>
+            <strong>Evidence:</strong> The on-premises AD DS forest was successfully added to Entra Connect,
+            enabling SweetCrust Bakery Ltd’s local identities to synchronize to the Microsoft cloud.
+        </p>
+
+        <h4>Task 2.5 — Configure Microsoft Entra Sign-In Settings</h4>
+        <p>
+            Microsoft Entra sign-in settings were configured to align the on-premises user identity with the cloud
+            identity format used for Microsoft 365 authentication.
+        </p>
+        <img src="../assets/images/H2-upn.png" class="lab-img" alt="Microsoft Entra sign-in configuration">
+        <p>
+            <strong>Evidence:</strong> User sign-in settings were reviewed to ensure synchronized users would have
+            predictable cloud sign-in identities.
+        </p>
+
+        <h4>Task 2.6 — Configure Domain and OU Filtering</h4>
+        <p>
+            OU filtering was configured so that only the intended directory objects would synchronize to Microsoft Entra ID.
+            This helps avoid synchronizing unnecessary test, service, or administrative objects into the cloud tenant.
+        </p>
+        <img src="../assets/images/H2-ou-filter.png" class="lab-img" alt="OU filtering configuration">
+        <p>
+            <strong>Evidence:</strong> OU filtering limited synchronization scope, ensuring only selected SweetCrust Bakery
+            objects were synchronized to Microsoft Entra ID.
+        </p>
+
+        <h4>Task 2.7 — Configure User Identity and Source Anchor</h4>
+        <p>
+            User identity and source anchor settings were configured to determine how on-premises users are matched
+            and uniquely tracked in Microsoft Entra ID.
+        </p>
+        <img src="../assets/images/H2-identities.png" class="lab-img" alt="User identity and source anchor configuration">
+        <p>
+            <strong>Evidence:</strong> Identity matching settings were configured to maintain a stable relationship
+            between local AD DS users and their cloud identities.
+        </p>
+
+        <h4>Task 2.8 — Configure Optional Features</h4>
+        <p>
+            Optional features were reviewed during configuration to determine which hybrid identity features were
+            appropriate for this lab environment.
+        </p>
+        <img src="../assets/images/H2-optional.png" class="lab-img" alt="Optional features configuration">
+
+        <h4>Task 2.9 — Configure Group Writeback</h4>
+        <p>
+            Group writeback options were reviewed as part of the hybrid identity configuration. This demonstrated
+            awareness of how group objects can be managed between cloud and on-premises environments.
+        </p>
+        <img src="../assets/images/H2-group-writeback.png" class="lab-img" alt="Group writeback configuration">
+
+        <h4>Task 2.10 — Enable Seamless Single Sign-On</h4>
+        <p>
+            Seamless SSO was enabled to improve the user authentication experience between domain-joined devices
+            and Microsoft cloud services. This allows domain users to access cloud services more smoothly when
+            signed in from trusted domain environments.
+        </p>
+        <img src="../assets/images/H2-sso.png" class="lab-img" alt="Enable Seamless SSO">
+        <img src="../assets/images/forest credentials.png" class="lab-img" alt="Forest credentials">
+        <p>
+            <strong>Evidence:</strong> Seamless SSO configuration was enabled, improving the Microsoft 365 sign-in
+            experience for SweetCrust Bakery domain users.
+        </p>
+
+        <h4>Task 2.11 — Final Review and Start Synchronization</h4>
+        <p>
+            The final configuration was reviewed and synchronization was started. This completed the main Entra Connect
+            deployment workflow.
+        </p>
+        <img src="../assets/images/H2-complete.png" class="lab-img" alt="Final review and sync completion">
+        <p>
+            <strong>Evidence:</strong> Entra Connect configuration completed successfully and synchronization was initiated.
+        </p>
+
+        <h3>Implementation Area 3 — Enable Hybrid Microsoft Entra ID Join</h3>
+        <p>
+            Hybrid Microsoft Entra ID Join was configured to allow domain-joined Windows devices to register
+            with Microsoft Entra ID. This allows devices to remain joined to the on-premises domain while also
+            participating in cloud-based identity and device management workflows.
+        </p>
+        <img src="../assets/images/H3-device-options.png" class="lab-img" alt="Device options configuration">
+        <img src="../assets/images/H3-windows10-later.png" class="lab-img" alt="Windows 10 or later selection">
+        <img src="../assets/images/H3-scp-configuration.png" class="lab-img" alt="SCP configuration">
+        <img src="../assets/images/H3-configure-complete.png" class="lab-img" alt="Hybrid join configuration complete">
+        <p>
+            <strong>Evidence:</strong> Hybrid Microsoft Entra ID Join was configured for Windows 10 or later devices,
+            enabling SweetCrust Bakery domain-joined endpoints to register with Microsoft Entra ID.
+        </p>
+
+        <h3>Implementation Area 4 — Verify Synchronization in Microsoft Entra ID</h3>
+        <p>
+            After synchronization, users and synchronization status were verified in Microsoft Entra ID.
+            This confirmed that local AD DS objects were visible from the Microsoft cloud administration plane.
+        </p>
+        <img src="../assets/images/H4-synced-users.png" class="lab-img" alt="Synced users in Entra ID">
+        <img src="../assets/images/H4-synced-status.png" class="lab-img" alt="Synchronization status">
+        <p>
+            <strong>Evidence:</strong> Synchronized users appeared in Microsoft Entra ID and synchronization status
+            confirmed that the hybrid directory connection was functioning.
+        </p>
+
+        <h3>Implementation Area 5 — Verify Hybrid Join on Windows 11</h3>
+        <p>
+            The Windows 11 endpoint was verified using <code>dsregcmd /status</code> and Microsoft Entra ID device records.
+            This confirmed the device was recognized by both the on-premises domain and Microsoft Entra ID.
+        </p>
+        <pre><code>dsregcmd /status</code></pre>
+        <img src="../assets/images/H5-win11-dsregcmd.png" class="lab-img" alt="Windows 11 dsregcmd status">
+        <img src="../assets/images/H5-win11-entra.png" class="lab-img" alt="Windows 11 device in Entra ID">
+        <p>
+            <strong>Evidence:</strong> Windows 11 hybrid join validation confirmed that the device was connected to
+            Microsoft Entra ID while still operating as a domain-joined endpoint.
+        </p>
+
+        <h3>Implementation Area 6 — Verify Hybrid Join on Windows 10</h3>
+        <p>
+            The Windows 10 endpoint was also verified to confirm hybrid join behavior across multiple Windows versions.
+            This validated that the configuration was not limited to a single endpoint.
+        </p>
+        <pre><code>dsregcmd /status</code></pre>
+        <img src="../assets/images/H5-win10-dsregcmd.png" class="lab-img" alt="Windows 10 dsregcmd status">
+        <img src="../assets/images/H5-win10-entra.png" class="lab-img" alt="Windows 10 device in Entra ID">
+        <p>
+            <strong>Evidence:</strong> Windows 10 hybrid join validation confirmed consistent hybrid identity behavior
+            across multiple SweetCrust Bakery Windows endpoints.
+        </p>
+    </section>
+
+    <section id="technical-evidence">
+        <h2>3. Technical Evidence</h2>
+        <p>
+            Technical evidence captured in this phase includes Active Directory preparation checks, DNS verification,
+            Entra Connect installation, cloud sign-in configuration, OU filtering, Seamless SSO configuration,
+            synchronization validation, and hybrid join verification for Windows 10 and Windows 11 devices.
+        </p>
+
+        <ul>
+            <li><strong>Directory Readiness:</strong> AD DS health, functional levels, DNS, UPN suffix, and time synchronization were validated before enabling synchronization.</li>
+            <li><strong>Hybrid Identity Bridge:</strong> Microsoft Entra Connect linked the on-premises AD DS forest to Microsoft Entra ID.</li>
+            <li><strong>Controlled Scope:</strong> OU filtering was configured to prevent unnecessary objects from synchronizing to the cloud.</li>
+            <li><strong>User Synchronization:</strong> SweetCrust Bakery users appeared in Microsoft Entra ID after synchronization.</li>
+            <li><strong>Device Hybrid Join:</strong> Windows 10 and Windows 11 endpoints were validated using <code>dsregcmd /status</code> and Entra device records.</li>
+        </ul>
+    </section>
+
+    <section id="validation">
+        <h2>4. Validation</h2>
+        <ul>
+            <li>Confirmed the on-premises Active Directory environment was healthy before synchronization.</li>
+            <li>Verified DNS resolution for internal and Microsoft cloud endpoints.</li>
+            <li>Confirmed the Entra Connect sync account was created and available.</li>
+            <li>Installed and configured Microsoft Entra Connect Sync successfully.</li>
+            <li>Validated OU filtering and identity configuration during setup.</li>
+            <li>Confirmed synchronized users appeared in Microsoft Entra ID.</li>
+            <li>Verified synchronization status from the Microsoft Entra admin center.</li>
+            <li>Confirmed hybrid join status on Windows 11 using <code>dsregcmd /status</code>.</li>
+            <li>Confirmed hybrid join status on Windows 10 using <code>dsregcmd /status</code>.</li>
+        </ul>
+    </section>
+
+    <section id="phase-takeaways">
+        <h2>5. Phase Takeaways</h2>
+        <ul>
+            <li>Microsoft Entra Connect provides the bridge between traditional AD DS and cloud identity services.</li>
+            <li>Directory health, DNS, time synchronization, and UPN readiness are critical before enabling synchronization.</li>
+            <li>OU filtering helps prevent unnecessary or unintended objects from synchronizing to the cloud.</li>
+            <li>Hybrid Microsoft Entra ID Join allows domain-joined devices to participate in cloud-based identity and access workflows.</li>
+            <li>This phase enabled SweetCrust Bakery Ltd to extend on-premises identities into Microsoft Entra ID while preserving its existing AD DS foundation.</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Francis Otoo. All rights reserved.</p>
+</footer>
+
+<div id="imgModal" class="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+<script>
+document.querySelectorAll('.lab-img').forEach(img => {
+    img.addEventListener('click', function () {
+        const modal = document.getElementById('imgModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    });
+});
+
+document.querySelector('.modal-close').onclick = function () {
+    document.getElementById('imgModal').style.display = "none";
+};
+
+document.getElementById('modalImage').onclick = function () {
+    document.getElementById('imgModal').style.display = "none";
+};
+
+document.getElementById('imgModal').onclick = function (e) {
+    if (e.target === this) {
+        this.style.display = "none";
+    }
+};
+
+
+
+
+function toggleMobileMenu() {
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("open");
+}
+</script>
+
+
+
+</body>
+</html>
+

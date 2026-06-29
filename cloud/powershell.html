@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerShell Automation & Microsoft Graph Reporting | Francis Otoo</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>PowerShell Automation & Microsoft Graph Reporting</h1>
+    <button class="mobile-menu-button" onclick="toggleMobileMenu()">
+    ☰ Menu
+</button>
+    <nav id="mainNav">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About Me</a>
+        <a href="../hybrid-identity-transformation.html">Hybrid Identity</a>
+        <a href="../iam-transformation.html">IAM</a>
+        <a href="powershell.html" class="active">Automation</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+</header>
+
+<aside class="toc" id="toc">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#project-overview">1. Project Overview</a></li>
+        <li><a href="#technologies-used">2. Technologies Used</a></li>
+        <li><a href="#business-problem">3. The Business Problem</a></li>
+        <li><a href="#solution-architecture-design">4. Solution Architecture & Design</a></li>
+        <li><a href="#implementation-phases">5. Implementation Phases</a></li>
+        <li><a href="#technical-evidence">6. Technical Evidence</a></li>
+        <li><a href="#validation-testing">7. Validation & Testing</a></li>
+        <li><a href="#troubleshooting">8. Troubleshooting</a></li>
+        <li><a href="#engineering-takeaways">9. Engineering Takeaways</a></li>
+    </ul>
+</aside>
+
+<main class="container">
+
+    <section id="project-overview">
+        <p class="case-study-label">CLOUD AUTOMATION CASE STUDY</p>
+
+        <h2>1. Project Overview</h2>
+
+        <h3>PowerShell Automation & Microsoft Graph Reporting</h3>
+
+        <div class="project-meta">
+            <p><strong>Business Scenario:</strong> SweetCrust Bakery Ltd — Cloud onboarding automation, Microsoft Graph reporting, and scheduled endpoint operations</p>
+            <p><strong>Project Type:</strong> Identity Automation, Endpoint Reporting & Scheduled Cloud Operations</p>
+            <p><strong>Role Alignment:</strong> IAM Analyst | Microsoft 365 Administrator | Endpoint Administrator | Cloud Administrator</p>
+        </div>
+
+        <p>
+            This project demonstrates how PowerShell 7 and the Microsoft Graph PowerShell SDK can automate
+            identity and endpoint administration in a Microsoft 365 cloud environment.
+        </p>
+
+        <p>
+            In the Hybrid Identity case study, SweetCrust Bakery migrated existing on-premises employees from
+            Active Directory Domain Services into Microsoft Entra ID. This project represents the next operational
+            stage: onboarding new cloud-only employees directly into Microsoft Entra ID and automating reporting
+            across Intune-managed endpoints.
+        </p>
+
+        <p>
+            The lab focuses on CSV-driven user provisioning, Microsoft Graph authentication, bulk user creation,
+            device inventory reporting, compliance auditing, scheduled automation, and troubleshooting.
+        </p>
+    </section>
+
+<section class="project-summary">
+
+    <h3>Project Summary</h3>
+
+    <div class="summary-grid">
+
+        <div class="summary-item">
+            <strong>Cloud Users Provisioned</strong>
+            <span>10</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Managed Endpoints</strong>
+            <span>2</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Automation Workflows</strong>
+            <span>User Provisioning • Reporting • Scheduling</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Platforms</strong>
+            <span>Graph • Entra ID • Intune</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+    <section id="technologies-used">
+        <h2>2. Technologies Used</h2>
+        <ul>
+            <li>PowerShell 7</li>
+            <li>Microsoft Graph PowerShell SDK</li>
+            <li>Microsoft Entra ID</li>
+            <li>Microsoft Intune</li>
+            <li>Microsoft 365 E3 Tenant</li>
+            <li>Windows 10 Endpoint</li>
+            <li>Windows 11 Endpoint</li>
+            <li>CSV-based onboarding files</li>
+            <li>Windows Task Scheduler</li>
+        </ul>
+    </section>
+
+    <section id="business-problem">
+        <h2>3. The Business Problem</h2>
+
+        <p>
+            After modernizing identity and endpoint management, SweetCrust Bakery had two categories of users:
+        </p>
+
+        <ul>
+            <li>
+                <strong>Existing employees:</strong> Created in on-premises Active Directory and synchronized into Microsoft Entra ID.
+            </li>
+            <li>
+                <strong>New cloud-only employees:</strong> Created directly in Microsoft Entra ID as the company adopted modern cloud administration.
+            </li>
+        </ul>
+
+        <p>
+            Manual creation of cloud-only users through the Microsoft 365 or Entra admin portal was slow,
+            repetitive, and error-prone. The IT administrator also needed a repeatable way to report on users,
+            managed devices, compliance states, and scheduled cloud operations.
+        </p>
+
+        <p>
+            The business needed a scalable automation approach to reduce manual effort, improve consistency,
+            and generate operational reports for identity and endpoint management.
+        </p>
+    </section>
+
+    <section id="solution-architecture-design">
+        <h2>4. Solution Architecture & Design</h2>
+
+        <p>
+            The solution was designed around a centralized IT admin workstation running PowerShell 7 and
+            Microsoft Graph PowerShell SDK. The admin workstation connects securely to Microsoft Graph and
+            performs cloud identity and endpoint reporting operations.
+        </p>
+
+        <div class="architecture-flow">
+
+            <div class="arch-box">
+                <strong>SweetCrust Bakery HR / Admin Request</strong>
+                <span>New cloud-only employees and reporting requirements</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>CSV Onboarding File</strong>
+                <span>Standardized user data prepared for automation</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>IT Admin Workstation</strong>
+                <span>PowerShell 7 and Microsoft Graph SDK installed</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Microsoft Graph API</strong>
+                <span>Programmatic access to Microsoft 365 cloud services</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Microsoft Entra ID</strong>
+                <span>Cloud-only user provisioning and identity validation</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Microsoft Intune</strong>
+                <span>Device inventory, compliance status, and endpoint reporting</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Scheduled Reports</strong>
+                <span>Recurring identity and endpoint reports generated automatically</span>
+            </div>
+
+        </div>
+
+        <p>
+            This design separates existing hybrid users from newly created cloud-only users while allowing the
+            same Microsoft 365 tenant to be managed through repeatable automation.
+        </p>
+    </section>
+
+    <section id="implementation-phases">
+        <h2>5. Implementation Phases</h2>
+
+        <h3>Phase 1 — Admin Workstation Preparation</h3>
+        <p>
+            The admin workstation was prepared with PowerShell 7 and the Microsoft Graph PowerShell SDK.
+            The Graph session was authenticated using delegated permissions required for user, directory,
+            and managed device operations.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/successfully authenticated to Microsoft Graph1.png" alt="PowerShell 7 authenticated to Microsoft Graph">
+            <figcaption>Figure 1.1 — PowerShell 7 admin session authenticated to Microsoft Graph using delegated permissions.</figcaption>
+        </figure>
+
+        <h3>Phase 2 — Bulk Cloud-Only User Creation</h3>
+        <p>
+            A CSV-driven onboarding workflow was used to simulate an HR-provided list of new SweetCrust Bakery
+            employees. These users represent new cloud-only hires created directly in Microsoft Entra ID, rather
+            than users synchronized from on-premises Active Directory.
+        </p>
+
+        <p>
+            PowerShell processed the CSV file, generated user principal names, applied standardized attributes,
+            and created multiple Microsoft Entra ID accounts through Microsoft Graph.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/bulkusercreation.png" alt="PowerShell bulk user creation output">
+            <figcaption>Figure 2.1 — PowerShell automation creating multiple Microsoft Entra ID users from a CSV onboarding file.</figcaption>
+        </figure>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/bulk-users-entra.png" alt="New users validated in Microsoft Entra admin center">
+            <figcaption>Figure 2.2 — Microsoft Entra admin center confirming newly provisioned cloud-only user accounts.</figcaption>
+        </figure>
+
+        <h3>Phase 3 — Bulk Device Inventory Reporting</h3>
+        <p>
+            Device inventory reporting was automated by querying Intune-managed devices through Microsoft Graph.
+            The report captured device names, operating systems, OS versions, compliance states, ownership type,
+            and last sync timestamps.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/Get-DeviceInventoryReport.ps1.png" alt="PowerShell device inventory report output">
+            <figcaption>Figure 3.1 — PowerShell-generated endpoint inventory report showing managed Windows devices and compliance states.</figcaption>
+        </figure>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/bulk-device-reporting-intune.png" alt="Microsoft Intune all devices validation">
+            <figcaption>Figure 3.2 — Intune Admin Center validation showing enrolled Windows endpoints.</figcaption>
+        </figure>
+
+        <h3>Phase 4 — Compliance Auditing</h3>
+        <p>
+            Compliance auditing focused on endpoint security posture visibility. The automation pulled compliance
+            state data from Intune to identify compliant, non-compliant, or error-state endpoints and exported the
+            results for operational review.
+        </p>
+
+        <div class="callout-card">
+            <strong>Operational Insight:</strong> Device inventory answers “what assets do we manage?” while
+            compliance auditing answers “are those assets healthy enough to access corporate resources?”
+        </div>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/Compliance-Audit.png" alt="PowerShell compliance audit report">
+            <figcaption>Figure 4.1 — Compliance audit report confirming endpoint compliance state.</figcaption>
+        </figure>
+
+        <h3>Phase 5 — Graph API Reporting Automation</h3>
+        <p>
+            Microsoft Graph PowerShell SDK was used as the automation interface for cloud resource retrieval.
+            The script queried both user identities and managed devices, then exported separate CSV reports for
+            administrative review.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/Graph API Automation.png" alt="Microsoft Graph cloud report output">
+            <figcaption>Figure 5.1 — Graph automation retrieving cloud users and managed endpoint data from Microsoft 365 services.</figcaption>
+        </figure>
+
+        <h3>Phase 6 — Scheduled Automation</h3>
+        <p>
+            Windows Task Scheduler was configured to run the Graph reporting script automatically. This simulates a
+            recurring enterprise reporting workflow where cloud inventory and compliance reports are generated
+            without manual execution.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/task-scheduler - automation-configuration.png" alt="Task Scheduler general configuration">
+            <figcaption>Figure 6.1 — Scheduled task configured with a professional task name, description, and elevated execution settings.</figcaption>
+        </figure>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/schedule-powershell-automation.png" alt="Task Scheduler PowerShell action configuration">
+            <figcaption>Figure 6.2 — Task Scheduler action configured to launch PowerShell 7 and execute the Microsoft Graph reporting script.</figcaption>
+        </figure>
+    </section>
+
+    <section id="technical-evidence">
+        <h2>6. Technical Evidence</h2>
+        <p>
+            Technical evidence captured in this project includes Graph authentication, bulk cloud-only user
+            creation, Microsoft Entra ID validation, Intune device inventory reporting, compliance auditing,
+            Graph API report generation, scheduled task configuration, and scheduled automation troubleshooting.
+        </p>
+    </section>
+
+    <section id="validation-testing">
+        <h2>7. Validation & Testing</h2>
+
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th>Validation Area</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Graph Authentication</strong></td>
+                    <td>PowerShell 7 session successfully authenticated to Microsoft Graph.</td>
+                </tr>
+                <tr>
+                    <td><strong>Bulk User Creation</strong></td>
+                    <td>Cloud-only users were created through Microsoft Graph and validated in Microsoft Entra ID.</td>
+                </tr>
+                <tr>
+                    <td><strong>Device Inventory Reporting</strong></td>
+                    <td>Windows 10 and Windows 11 endpoints were retrieved from Intune and exported to CSV.</td>
+                </tr>
+                <tr>
+                    <td><strong>Compliance Auditing</strong></td>
+                    <td>Endpoint compliance states were successfully queried and reported.</td>
+                </tr>
+                <tr>
+                    <td><strong>Graph Reporting</strong></td>
+                    <td>User and managed device reports were generated successfully.</td>
+                </tr>
+                <tr>
+                    <td><strong>Scheduled Automation</strong></td>
+                    <td>Task Scheduler execution was remediated and confirmed with Last Run Result 0x0.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="troubleshooting">
+        <h2>8. Troubleshooting</h2>
+
+        <p>
+            During scheduled automation validation, the task initially failed with <code>0x80070002</code>.
+            This indicated that Task Scheduler could not locate the executable or script path correctly.
+        </p>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/error-code-troubleshooting-logs.png" alt="Task Scheduler error code 0x80070002">
+            <figcaption>Figure 8.1 — Initial scheduled task validation failure showing error code 0x80070002.</figcaption>
+        </figure>
+
+        <h3>Root Cause</h3>
+        <p>
+            The PowerShell 7 executable path contained a space in <code>Program Files</code>. Task Scheduler
+            split the command incorrectly, interpreting <code>C:\Program</code> as the executable and moving
+            the rest of the path into the arguments field.
+        </p>
+
+        <h3>Resolution</h3>
+        <p>
+            The action was corrected by explicitly wrapping the PowerShell 7 executable path in quotation marks
+            and keeping the script path inside the argument field.
+        </p>
+
+<pre><code>"C:\Program Files\PowerShell\7\pwsh.exe"
+-NoProfile -ExecutionPolicy Bypass -File "C:\M365-Labs\GraphAutomation\Get-GraphCloudReport.ps1"</code></pre>
+
+        <figure class="lab-figure">
+            <img src="../assets/images/scheduled-automation-success.png" alt="Task Scheduler successful result 0x0">
+            <figcaption>Figure 8.2 — Final validation showing Last Run Result 0x0, confirming successful scheduled automation execution.</figcaption>
+        </figure>
+
+        <div class="callout-card">
+            <strong>Engineering Insight:</strong> A scheduled task is not production-ready until execution results,
+            output files, and logs confirm successful completion.
+        </div>
+    </section>
+
+    <section id="engineering-takeaways">
+        <h2>9. Engineering Takeaways</h2>
+
+        <ul>
+            <li>
+                PowerShell and Microsoft Graph provide a repeatable way to onboard cloud-only users directly into Microsoft Entra ID.
+            </li>
+            <li>
+                Hybrid users and cloud-only users can coexist in the same Microsoft 365 tenant, but they should be documented clearly.
+            </li>
+            <li>
+                CSV-driven onboarding reduces manual portal work and improves consistency during hiring cycles.
+            </li>
+            <li>
+                Graph-based reporting improves visibility across identities, devices, and compliance states.
+            </li>
+            <li>
+                Scheduled automation helps convert manual administrative reporting into a repeatable operational workflow.
+            </li>
+            <li>
+                Automation must be validated with logs, output files, and successful task execution results.
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Francis Otoo. All rights reserved.</p>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>

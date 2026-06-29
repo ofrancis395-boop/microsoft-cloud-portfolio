@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 1: On-Premises Identity Foundation | Francis Otoo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Phase 1: On-Premises Identity Foundation</h1>
+    <button class="mobile-menu-button" onclick="toggleMobileMenu()">
+    ☰ Menu
+</button>
+    <nav id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Me</a>
+        <a href="hybrid-identity-transformation.html">Hybrid Identity</a>
+        <a href="iam-transformation.html">IAM</a>
+        <a href="cloud/powershell.html">Automation</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<aside class="toc">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#phase-overview">1. Phase Overview</a></li>
+        <li><a href="#implementation-steps">2. Implementation Steps</a></li>
+        <li><a href="#technical-evidence">3. Technical Evidence</a></li>
+        <li><a href="#validation">4. Validation</a></li>
+        <li><a href="#phase-takeaways">5. Phase Takeaways</a></li>
+    </ul>
+</aside>
+
+<main class="container">
+
+    <section id="phase-overview">
+        <p class="case-study-label">SUPPORTING IMPLEMENTATION EVIDENCE</p>
+
+        <h2>1. Phase Overview</h2>
+
+        <div class="project-meta">
+            <p><strong>Parent Case Study:</strong> Hybrid Identity Transformation</p>
+            <p><strong>Business Scenario:</strong> SweetCrust Bakery Ltd — On-Premises Identity Foundation</p>
+            <p><strong>Phase:</strong> Phase 1 of 3</p>
+            <p><strong>Technologies:</strong> Windows Server, AD DS, DNS, Group Policy, Windows 11</p>
+            <p><strong>Role Alignment:</strong> Systems Administrator | Infrastructure Administrator | Hybrid Identity Support</p>
+        </div>
+
+        <p>
+            This phase establishes the on-premises identity foundation for the Hybrid Identity Transformation case study.
+            It documents the deployment of Windows Server, Active Directory Domain Services, DNS, delegated administration,
+            domain join, user authentication, and Group Policy validation.
+        </p>
+
+        <p>
+            The purpose of this phase is to create the identity foundation that SweetCrust Bakery Ltd would use before
+            extending identities into Microsoft Entra ID and later managing endpoints through Microsoft Intune.
+        </p>
+    </section>
+
+    <section id="implementation-steps">
+        <h2>2. Implementation Steps</h2>
+
+        <h3>Implementation Area 1 — Windows Server Preparation</h3>
+
+        <h4>Task 1.1 — Windows Server Installation</h4>
+        <p>
+            Installed Windows Server and prepared the environment for Active Directory Domain Services.
+            This foundational step ensured the server operating system was ready for domain controller promotion,
+            identity services, DNS, and centralized authentication.
+        </p>
+
+        <h4>Task 1.2 — Configure Static IP Address on Domain Controller</h4>
+        <p>
+            Assigned a static IPv4 address to the domain controller. A domain controller must not rely on DHCP,
+            because DNS, Kerberos authentication, and domain service discovery require consistent network addressing.
+        </p>
+        <img src="assets/images/dc-static-ip.png" alt="Static IP configuration on domain controller">
+        <p>
+            <strong>Evidence:</strong> The domain controller was configured with a static IP address, providing
+            a stable network identity for DNS resolution, authentication, and domain controller discovery.
+        </p>
+
+        <h3>Implementation Area 2 — Active Directory Domain Services Installation</h3>
+
+        <h4>Task 2.1 — Select AD DS Role</h4>
+        <p>
+            In Server Manager, selected the Active Directory Domain Services role. This role provides the directory
+            services required to create and manage a Windows domain, including authentication, authorization, and directory queries.
+        </p>
+        <img src="assets/images/adds-checkbox.png" alt="AD DS role checkbox selected">
+
+        <h4>Task 2.2 — AD DS Installation Progress</h4>
+        <p>
+            The Add Roles and Features wizard installed the AD DS binaries and required components.
+            This prepared the server for promotion to a domain controller.
+        </p>
+        <img src="assets/images/adds-progress.png" alt="AD DS installation progress bar">
+
+        <h3>Implementation Area 3 — Domain Controller Promotion</h3>
+
+        <h4>Task 3.1 — Promote This Server to a Domain Controller</h4>
+        <p>
+            After AD DS installation, Server Manager displayed the promotion notification. Selecting
+            “Promote this server to a domain controller” launched the AD DS Configuration Wizard.
+        </p>
+        <img src="assets/images/promote-to-dc.png" alt="Promote this server to a domain controller">
+        <p>
+            <strong>Evidence:</strong> The server was ready for domain controller promotion, moving the environment
+            from a standalone Windows Server installation into a centralized identity platform.
+        </p>
+
+        <h4>Task 3.2 — Deployment Configuration: New Forest</h4>
+        <p>
+            Created a new forest by specifying the root domain name. This established the core Active Directory structure
+            and defined the namespace for all domain objects used by SweetCrust Bakery Ltd.
+        </p>
+        <img src="assets/images/deployment-config.png" alt="Deployment configuration new forest">
+
+        <h4>Task 3.3 — Domain Controller Options</h4>
+        <p>
+            Configured domain controller capabilities, including DNS and Global Catalog. The Directory Services Restore Mode
+            password was configured for offline recovery scenarios.
+        </p>
+        <img src="assets/images/dc-options.png" alt="Domain controller options and DSRM password">
+
+        <h4>Task 3.4 — DNS Delegation</h4>
+        <p>
+            The DNS delegation page appeared during promotion. Because this was a new forest with no parent zone,
+            the DNS delegation option remained unchecked.
+        </p>
+        <img src="assets/images/dns-delegation.png" alt="DNS delegation page">
+
+        <h4>Task 3.5 — Review Options</h4>
+        <p>
+            Reviewed all configuration choices, including domain name, forest functional level, DNS installation,
+            and Global Catalog status before starting promotion.
+        </p>
+        <img src="assets/images/review-options.png" alt="Review options summary">
+
+        <h4>Task 3.6 — Prerequisite Check Passed</h4>
+        <p>
+            The prerequisite check validated DNS, credentials, name resolution, and configuration. All checks passed,
+            confirming the server was ready to be promoted.
+        </p>
+        <img src="assets/images/prereq-check.png" alt="Prerequisite check passed">
+        <p>
+            <strong>Evidence:</strong> The successful prerequisite check confirmed that the server met the technical
+            requirements for domain controller promotion before AD DS was finalized.
+        </p>
+
+        <h3>Implementation Area 4 — Windows 11 Client Preparation</h3>
+
+        <h4>Task 4.1 — Configure Static IP on Windows 11</h4>
+        <p>
+            Assigned a static IPv4 address to the Windows 11 workstation and pointed the Preferred DNS server
+            to the domain controller. This allowed the client to locate the domain controller and resolve the domain name.
+        </p>
+        <img src="assets/images/win11-static-ip.png" alt="Windows 11 static IP configuration">
+
+        <h3>Implementation Area 5 — Delegated Administration</h3>
+
+        <h4>Task 5.1 — Created Limited User Account</h4>
+        <p>
+            Created a standard user account named John Mensah. This account was used to join Windows 11 to the domain,
+            following least-privilege principles instead of using the built-in Administrator account.
+        </p>
+        <img src="assets/images/john-mensah.png" alt="Limited user account creation">
+
+        <h4>Task 5.2 — Delegation of Control Wizard</h4>
+        <p>
+            Used the Delegation of Control Wizard to grant John Mensah the ability to create and manage computer accounts
+            in a specific OU. This demonstrated delegated administration and separation of duties.
+        </p>
+        <img src="assets/images/delegation-wizard.png" alt="Delegation of control wizard">
+        <p>
+            <strong>Evidence:</strong> Delegated administration was configured so a limited user could perform the
+            domain join operation without requiring full Domain Administrator privileges.
+        </p>
+
+        <h3>Implementation Area 6 — Domain Join</h3>
+
+        <h4>Task 6.1 — Join Windows 11 to the Domain</h4>
+        <p>
+            Joined the Windows 11 workstation to the domain using the delegated account. The successful domain join confirmed
+            that authentication, DNS, and domain trust were functioning correctly.
+        </p>
+        <img src="assets/images/welcome-domain.png" alt="Welcome to the domain message">
+        <p>
+            <strong>Evidence:</strong> Windows 11 successfully joined the SweetCrust Bakery domain using delegated credentials,
+            validating DNS resolution, Active Directory communication, and domain trust functionality.
+        </p>
+
+        <h3>Implementation Area 7 — Post-Promotion Verification</h3>
+
+        <h4>Task 7.1 — First Login After Domain Controller Promotion</h4>
+        <p>
+            Logged into the domain controller after promotion using the domain Administrator account. This confirmed that
+            AD DS services started correctly and that the domain controller was operational.
+        </p>
+        <img src="assets/images/first-login.png" alt="First login after DC promotion">
+
+        <h3>Implementation Area 8 — User Management & Group Policy Validation</h3>
+
+        <h4>Task 8.1 — Created User “Prince” in Staff OU</h4>
+        <p>
+            Created a new user account named Prince inside the Staff OU. Placing users in the correct OU supports targeted
+            Group Policy application, permission management, and directory organization.
+        </p>
+        <img src="assets/images/prince-created.png" alt="Prince user creation summary">
+
+        <h4>Task 8.2 — Prince’s First Login</h4>
+        <p>
+            Prince logged into the Windows 11 workstation for the first time. This confirmed that the account was created
+            correctly, domain authentication worked, and a new domain user profile was generated.
+        </p>
+        <img src="assets/images/prince-login.png" alt="Prince first login">
+        <p>
+            <strong>Evidence:</strong> Prince successfully authenticated against Active Directory from a domain-joined
+            Windows 11 workstation, demonstrating centralized identity management and domain authentication.
+        </p>
+
+        <h4>Task 8.3 — gpupdate /force</h4>
+        <p>
+            Ran <code>gpupdate /force</code> to immediately refresh Group Policy settings from the domain controller.
+            This forced the client to retrieve the latest user and computer policy settings.
+        </p>
+        <img src="assets/images/gpupdate.png" alt="gpupdate force command">
+
+        <h4>Task 8.4 — gpresult /r</h4>
+        <p>
+            Ran <code>gpresult /r</code> to verify which Group Policy Objects were successfully applied to the user and computer.
+        </p>
+        <img src="assets/images/gpresult.png" alt="gpresult output">
+        <p>
+            <strong>Evidence:</strong> The Group Policy result output confirmed that domain policies were applying
+            to the workstation and user context, validating centralized configuration management.
+        </p>
+    </section>
+
+    <section id="technical-evidence">
+        <h2>3. Technical Evidence</h2>
+        <p>
+            Evidence captured in this phase includes Windows Server preparation, static IP configuration,
+            AD DS installation, domain controller promotion, delegated administration, domain join,
+            user creation, and Group Policy validation.
+        </p>
+
+        <ul>
+            <li><strong>Network Foundation:</strong> Static IP and DNS configuration prepared the domain controller and client for reliable name resolution.</li>
+            <li><strong>Directory Services:</strong> AD DS was installed and the server was promoted into a domain controller.</li>
+            <li><strong>Least Privilege:</strong> Delegated administration was used to avoid unnecessary Domain Administrator usage.</li>
+            <li><strong>Client Integration:</strong> Windows 11 was joined to the domain and authenticated successfully.</li>
+            <li><strong>Policy Validation:</strong> Group Policy refresh and reporting confirmed centralized policy application.</li>
+        </ul>
+    </section>
+
+    <section id="validation">
+        <h2>4. Validation</h2>
+        <ul>
+            <li>Confirmed the domain controller was configured with a static IP address.</li>
+            <li>Verified AD DS role installation and successful domain controller promotion.</li>
+            <li>Validated DNS and domain trust by joining Windows 11 to the domain.</li>
+            <li>Confirmed delegated domain join using a limited-permission user account.</li>
+            <li>Verified user authentication by logging in as Prince on the domain-joined Windows 11 device.</li>
+            <li>Confirmed Group Policy application using <code>gpupdate /force</code> and <code>gpresult /r</code>.</li>
+        </ul>
+    </section>
+
+    <section id="phase-takeaways">
+        <h2>5. Phase Takeaways</h2>
+        <ul>
+            <li>Active Directory provides centralized authentication and user management for on-premises environments.</li>
+            <li>DNS is critical for domain join, authentication, and domain controller discovery.</li>
+            <li>Delegated administration supports least privilege by avoiding unnecessary use of domain administrator accounts.</li>
+            <li>Group Policy allows administrators to enforce consistent configuration across domain-joined devices.</li>
+            <li>This phase created the identity foundation required before extending the environment into Microsoft Entra ID.</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Francis Otoo. All rights reserved.</p>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Governance & Access Control Transformation | Francis Otoo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Identity Governance & Access Control Transformation</h1>
+    <button class="mobile-menu-button" onclick="toggleMobileMenu()">
+    ☰ Menu
+</button>
+    <nav id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Me</a>
+        <a href="hybrid-identity-transformation.html">Hybrid Identity</a>
+        <a href="iam-transformation.html" class="active">IAM</a>
+        <a href="cloud/powershell.html">Automation</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<aside class="toc">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#project-overview">1. Project Overview</a></li>
+        <li><a href="#technologies-used">2. Technologies Used</a></li>
+        <li><a href="#business-problem">3. The Business Problem</a></li>
+        <li><a href="#solution-architecture-design">4. Solution Architecture & Design</a></li>
+        <li><a href="#implementation-phases">5. Implementation Phases</a></li>
+        <li><a href="#technical-evidence">6. Technical Evidence</a></li>
+        <li><a href="#validation-testing">7. Validation & Testing</a></li>
+        <li><a href="#troubleshooting">8. Troubleshooting</a></li>
+        <li><a href="#engineering-takeaways">9. Engineering Takeaways</a></li>
+    </ul>
+</aside>
+
+<main class="container">
+
+    <section id="project-overview">
+        <p class="case-study-label">IAM CASE STUDY</p>
+
+        <h2>1. Project Overview</h2>
+
+        <h3>Identity Governance & Access Control Transformation</h3>
+
+        <div class="project-meta">
+            <p><strong>Business Scenario:</strong> SweetCrust Bakery Ltd — Identity Governance for a growing Microsoft 365 environment</p>
+            <p><strong>Project Type:</strong> IAM, RBAC, JML, PIM, Access Reviews, Application Access Control & Audit Reporting</p>
+            <p><strong>Role Alignment:</strong> IAM Analyst | IAM Engineer | Microsoft 365 Administrator | Identity Governance Administrator</p>
+        </div>
+
+        <p>
+            This case study documents the implementation of an Identity and Access Management model for
+            <strong>SweetCrust Bakery Ltd</strong>, a growing business using Microsoft Entra ID, Microsoft 365,
+            Microsoft Intune, and Microsoft Entra ID Governance.
+        </p>
+
+        <p>
+            The project builds on the earlier Hybrid Identity Transformation case study, where existing users
+            were synchronized from on-premises Active Directory into Microsoft Entra ID. After identity
+            modernization, the business required stronger governance controls to manage user access,
+            role changes, privileged administration, application access, and audit reporting.
+        </p>
+
+        <p>
+            The goal of this project was to implement a practical IAM operating model based on least privilege,
+            role-based access control, Joiner-Mover-Leaver lifecycle management, access reviews, privileged
+            access governance, and repeatable audit reporting.
+        </p>
+    </section>
+
+
+<section class="project-summary">
+
+    <h3>Project Summary</h3>
+
+    <div class="summary-grid">
+
+        <div class="summary-item">
+            <strong>Users Managed</strong>
+            <span>14</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Security Groups</strong>
+            <span>6</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Governance Controls</strong>
+            <span>RBAC • PIM • Access Reviews • JML</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Enterprise Application</strong>
+            <span>Finance Portal (Group-Based Access)</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+    <section id="technologies-used">
+        <h2>2. Technologies Used</h2>
+        <ul>
+            <li>Microsoft Entra ID</li>
+            <li>Microsoft Entra ID Governance</li>
+            <li>Microsoft Privileged Identity Management (PIM)</li>
+            <li>Microsoft 365 E3</li>
+            <li>Microsoft SharePoint Online</li>
+            <li>Microsoft My Apps Portal</li>
+            <li>Enterprise Applications</li>
+            <li>Security Groups</li>
+            <li>Role-Based Access Control (RBAC)</li>
+            <li>Microsoft Graph PowerShell</li>
+            <li>Windows 10</li>
+            <li>Windows 11</li>
+        </ul>
+    </section>
+
+    <section id="business-problem">
+        <h2>3. The Business Problem</h2>
+
+        <p>
+            As SweetCrust Bakery Ltd adopted Microsoft 365 and cloud-based identity management, access control
+            became more difficult to manage manually. Users required access based on job roles, departments,
+            and business responsibilities, while administrators needed a secure method to perform privileged
+            tasks without holding permanent elevated access.
+        </p>
+
+        <p>
+            The business faced several identity governance risks:
+        </p>
+
+        <ul>
+            <li>Users could accumulate unnecessary access after changing departments.</li>
+            <li>New employees required consistent onboarding, group membership, and license validation.</li>
+            <li>Departing employees needed immediate access revocation.</li>
+            <li>Standard users needed productivity access but should be blocked from administrative portals.</li>
+            <li>Helpdesk and IAM staff needed delegated permissions without Global Administrator access.</li>
+            <li>Privileged access needed to be temporary, auditable, and Just-In-Time.</li>
+            <li>Finance application access needed to be restricted to authorized users only.</li>
+            <li>IAM administrators needed audit reports for users, licensing, and group memberships.</li>
+        </ul>
+    </section>
+
+    <section id="solution-architecture-design">
+        <h2>4. Solution Architecture & Design</h2>
+
+        <p>
+            The solution was designed around Microsoft Entra ID as the central identity platform. Security groups
+            were used to define role-based access boundaries, Microsoft Entra ID Governance was used for access
+            reviews, and PIM was used to control privileged administrative access.
+        </p>
+
+        <div class="architecture-flow">
+
+            <div class="arch-box">
+                <strong>SweetCrust Bakery Employees</strong>
+                <span>Finance, Helpdesk, HR, IAM team, standard employees, and cloud-only hires</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Microsoft Entra ID</strong>
+                <span>Central identity platform for users, groups, roles, and applications</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Security Groups & RBAC</strong>
+                <span>SG-Finance, SG-Helpdesk, SG-IAM-Team, SG-All-Employees, SG-PIM-Eligible-Admins</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Joiner-Mover-Leaver Lifecycle</strong>
+                <span>Controlled onboarding, role changes, license validation, and access revocation</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Privileged Identity Management</strong>
+                <span>Eligible assignments, Just-In-Time activation, temporary admin access, and automatic expiration</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>Access Reviews & Enterprise Applications</strong>
+                <span>Finance access certification, My Apps visibility, group-based application authorization</span>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <div class="arch-box">
+                <strong>IAM Audit & Reporting</strong>
+                <span>User inventory, license visibility, group membership reporting, and governance evidence</span>
+            </div>
+
+        </div>
+
+        <p>
+            This design ensures that access decisions are based on business role, group membership, governance
+            review, and time-bound privileged access rather than permanent or individually assigned permissions.
+        </p>
+    </section>
+
+    
+
+    <section id="implementation-phases">
+
+    <h2>5. Implementation Phases</h2>
+
+    <p>
+        The IAM transformation was implemented through a series of structured phases that aligned identity
+        administration, governance, privileged access management, and access control with business requirements.
+    </p>
+
+    <div class="phase-card">
+        <h3>Phase 1 – Enterprise RBAC Foundation & Security Group Design</h3>
+
+        <p>
+            The project began with the design of a scalable Role-Based Access Control (RBAC) model for
+            SweetCrust Bakery Ltd. Department-based security groups were created to support access delegation,
+            governance, onboarding, offboarding, and future privileged access controls.
+        </p>
+
+        <ul>
+            <li>SG-IAM-Team</li>
+            <li>SG-Helpdesk</li>
+            <li>SG-HR</li>
+            <li>SG-Finance</li>
+            <li>SG-All-Employees</li>
+            <li>SG-PIM-Eligible-Admins</li>
+        </ul>
+
+        <p><strong>Outcome:</strong> Established the identity foundation required for RBAC, governance, and delegated administration.</p>
+
+        
+    </div>
+    
+
+    <div class="phase-card">
+        <h3>Phase 2 – Joiner Process & Licensing Validation</h3>
+
+        <p>
+            A new IAM employee, Michael Brown, was onboarded into Microsoft Entra ID and assigned to the
+            appropriate security groups. Access validation identified a Microsoft 365 licensing issue that
+            prevented SharePoint access.
+        </p>
+
+        <p>
+            Investigation confirmed that group membership had been assigned correctly, but the user had not
+            received a Microsoft 365 E3 license.
+        </p>
+
+        <p>
+            After license assignment, SharePoint access was successfully restored.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated structured onboarding, troubleshooting methodology, and licensing governance.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 3 – Mover Process (Department Transfer)</h3>
+
+        <p>
+            Michael Brown was transferred from the IAM team to the Helpdesk department.
+            Existing access was reviewed and updated to align with new responsibilities.
+        </p>
+
+        <ul>
+            <li>Removed from SG-IAM-Team</li>
+            <li>Added to SG-Helpdesk</li>
+            <li>Retained SG-All-Employees membership</li>
+        </ul>
+
+        <p>
+            This prevented privilege accumulation while ensuring the employee retained the access required
+            for their new role.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated controlled access reassignment and privilege creep prevention.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 4 – Leaver Process & Access Revocation</h3>
+
+        <p>
+            The offboarding process validated that access could be removed immediately when an employee
+            leaves the organization.
+        </p>
+
+        <p>
+            A former employee account was disabled, active sessions were revoked, and access validation
+            was performed from a managed Windows endpoint.
+        </p>
+
+        <p>
+            Microsoft successfully blocked authentication attempts, confirming that organizational access
+            had been removed.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated secure offboarding and identity lifecycle enforcement.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 5 – RBAC & Delegated Administration</h3>
+
+        <p>
+            Delegated administration was implemented using Microsoft Entra ID administrative roles.
+            Instead of assigning Global Administrator access, operational tasks were delegated using
+            the User Administrator role.
+        </p>
+
+        <p>
+            Validation confirmed that delegated administrators could manage users and groups while
+            remaining restricted from higher-risk administrative functions.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated least privilege and secure delegation of administrative responsibilities.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 6 – Privileged Access Governance (PIM)</h3>
+
+        <p>
+            Microsoft Entra Privileged Identity Management (PIM) was implemented to eliminate standing
+            administrative privileges and enforce Just-In-Time (JIT) access.
+        </p>
+
+        <p>
+            Michael Brown was assigned an <strong>Eligible</strong> User Administrator role and activated
+            privileged access only when administrative tasks were required.
+        </p>
+
+        <p>
+            Validation confirmed:
+        </p>
+
+        <ul>
+            <li>Eligible assignment creation</li>
+            <li>JIT role activation</li>
+            <li>Password reset administration</li>
+            <li>Time-bound activation controls validated through Microsoft Entra PIM</li>
+        </ul>
+
+        <p>
+            Following expiration, the role automatically returned to an eligible state and privileged
+            access was removed.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated modern privileged access governance and Zero Trust principles.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 7 – Identity Governance & Access Reviews</h3>
+
+        <p>
+            Microsoft Entra Access Reviews were implemented to validate membership of the SG-Finance
+            security group and identify potentially unnecessary access.
+        </p>
+
+        <p>
+            The review process generated automated recommendations based on user activity and demonstrated
+            governance-driven access certification.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated ongoing access validation, governance automation, and least privilege enforcement.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 8 – Enterprise Application Access Control</h3>
+
+        <p>
+            A Finance application was integrated into Microsoft Entra ID and secured using group-based
+            authorization through SG-Finance.
+        </p>
+
+        <p>
+            Authorized users inherited access through group membership while unauthorized users were
+            prevented from viewing or accessing the application.
+        </p>
+
+        <p>
+            Validation confirmed successful application visibility for approved users and access denial
+            for unauthorized users.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated enterprise application access control through group-based authorization and centralized identity management.</p>
+    </div>
+
+    <div class="phase-card">
+        <h3>Phase 9 – IAM Audit & Reporting</h3>
+
+        <p>
+            Microsoft Graph PowerShell automation was used to generate audit reports covering users,
+            licensing, and security group memberships.
+        </p>
+
+        <p>
+            Automated reporting improved visibility into identity inventory, RBAC assignments, and
+            governance controls while reducing manual administrative effort.
+        </p>
+
+        <p><strong>Outcome:</strong> Demonstrated operational IAM reporting and governance automation.</p>
+    </div>
+
+</section>
+
+
+
+<section id="technical-evidence">
+
+    <h2>6. Technical Evidence</h2>
+
+    <p>
+        The following screenshots provide implementation evidence for each stage of the
+        Identity Governance & Access Control Transformation project.
+    </p>
+
+    <div class="evidence-grid">
+
+        <div class="evidence-card">
+            <h3>RBAC Foundation</h3>
+            <img src="assets/images/entra-id-enterprise-security-groups.png" alt="Enterprise Security Groups">
+            <p>
+                Security groups established to support RBAC, governance, onboarding,
+                offboarding, delegated administration, and privileged access management.
+            </p>
+        </div>
+
+
+        <div class="evidence-card">
+            <h3>Joiner Access Failure</h3>
+            <img src="assets/images/iam-joiner-sharepoint-license-failure.png" alt="Joiner License Failure">
+            <p>
+                SharePoint access denied because Microsoft 365 licensing had not yet been assigned.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Joiner Process</h3>
+            <img src="assets/images/iam-sharepoint-access-restored-after-license.png" alt="SharePoint Access Restored">
+            <p>
+                SharePoint access successfully restored following Microsoft 365 E3 license assignment.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Mover Process</h3>
+            <img src="assets/images/iam-mover-group-membership-update.png" alt="Mover Process">
+            <p>
+                Department transfer completed through controlled security group reassignment.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Leaver Process</h3>
+            <img src="assets/images/iam-leaver-account-access-denied.png" alt="Leaver Process">
+            <p>
+                User access successfully revoked following account disablement and sign-in restriction.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Delegated Administration</h3>
+            <img src="assets/images/iam-rbac-kelvin-group-membership-management.png" alt="Delegated Administration">
+            <p>
+                Administrative functions delegated using RBAC rather than Global Administrator privileges.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Access Reviews</h3>
+            <img src="assets/images/iam-access-review-active.png" alt="Access Review">
+            <p>
+                Microsoft Entra Access Review configured for governance-driven membership validation.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Access Review Recommendation</h3>
+            <img src="assets/images/iam-access-review-recommended-deny.png" alt="Access Review Recommendation">
+            <p>
+                Automated governance recommendation generated for inactive access review decisions.
+            </p>
+        </div>
+
+
+
+<div class="evidence-card">
+    <h3>Application Group Assignment</h3>
+    <img src="assets/images/iam-enterprise-app-group-assignment.png" alt="Application Group Assignment">
+    <p>
+        SG-Finance assigned to the Finance Portal application to enforce group-based authorization.
+    </p>
+</div>
+
+
+
+
+        <div class="evidence-card">
+            <h3>Enterprise Application Access</h3>
+            <img src="assets/images/iam-sso-authorized-user-access.png" alt="Authorized User Access">
+            <p>
+                Authorized Finance user successfully received application visibility through SG-Finance membership.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Unauthorized Access Validation</h3>
+            <img src="assets/images/iam-sso-unauthorized-user-denied.png" alt="Unauthorized Access">
+            <p>
+                Unauthorized user denied access due to lack of SG-Finance membership.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>PIM Eligible Assignment</h3>
+            <img src="assets/images/iam-pim-assignment-validation.png" alt="PIM Assignment">
+            <p>
+                Michael Brown assigned an Eligible User Administrator role through Microsoft Entra PIM.
+            </p>
+        </div>
+
+
+        <div class="evidence-card">
+            <h3>PIM Activation Request</h3>
+            <img src="assets/images/iam-pim-jit-activation-request.png" alt="PIM Activation Request">
+            <p>
+                Michael Brown requested temporary User Administrator privileges through Microsoft Entra Privileged Identity Management before elevation was approved and activated.
+            </p>
+        </div>
+
+
+
+        <div class="evidence-card">
+            <h3>PIM Role Activation</h3>
+            <img src="assets/images/iam-pim-role-activated.png" alt="PIM Activated">
+            <p>
+                Just-In-Time privileged access successfully activated with automatic expiration controls.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>PIM Administrative Validation</h3>
+            <img src="assets/images/iam-pim-password-reset-validation.png" alt="PIM Validation">
+            <p>
+                Temporary administrative access validated through password reset functionality.
+            </p>
+        </div>
+
+
+
+            <div class="evidence-card">
+                <h3>PIM Audit Trail</h3>
+                <img src="assets/images/iam-pim-audit-trail.png" alt="PIM Audit Trail">
+                <p>
+                    Microsoft Entra PIM audit history recorded the eligible User Administrator role assignment for Michael Brown, providing governance and compliance evidence for privileged access management activities.
+                </p>
+            </div>
+
+        
+
+        <div class="evidence-card">
+            <h3>User Audit Reporting</h3>
+            <img src="assets/images/iam-audit-user-report.png" alt="User Audit Report">
+            <p>
+                Microsoft Graph PowerShell user inventory and identity governance reporting.
+            </p>
+        </div>
+
+        <div class="evidence-card">
+            <h3>Group Membership Reporting</h3>
+            <img src="assets/images/iam-audit-group-membership-report.png" alt="Group Membership Report">
+            <p>
+                Automated RBAC and group membership reporting for governance visibility.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="validation-testing">
+
+    <h2>7. Validation & Testing</h2>
+
+    <p>
+        A series of validation exercises were performed throughout the project to ensure
+        identity governance controls functioned as designed. Testing focused on access
+        provisioning, role assignment, privilege elevation, access reviews, application
+        authorization, and automated governance controls.
+    </p>
+
+    <div class="phase-card">
+
+        <h3>Joiner Validation</h3>
+
+        <ul>
+            <li>New employee account successfully onboarded.</li>
+            <li>Security group membership assigned.</li>
+            <li>Microsoft 365 E3 license applied.</li>
+            <li>SharePoint access restored after licensing correction.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Mover Validation</h3>
+
+        <ul>
+            <li>User transferred between departments.</li>
+            <li>Previous access removed.</li>
+            <li>New department permissions applied.</li>
+            <li>Privilege accumulation prevented.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Leaver Validation</h3>
+
+        <ul>
+            <li>Account disabled.</li>
+            <li>Authentication blocked.</li>
+            <li>Access revocation confirmed from managed endpoint.</li>
+            <li>Organizational resources inaccessible.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>RBAC Validation</h3>
+
+        <ul>
+            <li>User Administrator role assigned.</li>
+            <li>User management tasks available.</li>
+            <li>Higher privilege functions remained restricted.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>PIM Validation</h3>
+
+        <ul>
+            <li>Eligible assignment created.</li>
+            <li>Just-In-Time activation completed.</li>
+            <li>Password reset functionality validated.</li>
+            <li>Time-bound activation controls validated through Microsoft Entra PIM.</li>
+            <li>Privileged administrative tasks successfully completed during activation window.</li>
+            <li>PIM audit logs successfully recorded privileged role assignment activity.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Access Review Validation</h3>
+
+        <ul>
+            <li>Access Review created successfully.</li>
+            <li>Review recommendations generated.</li>
+            <li>Governance controls validated.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Enterprise Application Access Validation</h3>
+
+        <ul>
+            <li>Authorized user successfully accessed Finance application.</li>
+            <li>Unauthorized user could not view the application.</li>
+            <li>Group-based authorization verified.</li>
+        </ul>
+
+        <p><strong>Result:</strong> PASS</p>
+
+    </div>
+
+</section>
+
+<section id="troubleshooting">
+
+    <h2>8. Troubleshooting</h2>
+
+    <div class="phase-card">
+
+        <h3>Issue 1 – SharePoint Access Failure</h3>
+
+        <p><strong>Problem:</strong></p>
+
+        <p>
+            User account was correctly provisioned and assigned security group membership
+            but could not access SharePoint Online resources.
+        </p>
+
+        <p><strong>Root Cause:</strong></p>
+
+        <p>
+            Microsoft 365 E3 license had not been assigned.
+        </p>
+
+        <p><strong>Resolution:</strong></p>
+
+        <p>
+            Assigned Microsoft 365 E3 license and validated access restoration.
+        </p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Issue 2 – PIM Access Validation</h3>
+
+        <p><strong>Problem:</strong></p>
+
+        <p>
+            User Administrator role appeared unavailable after initial testing.
+        </p>
+
+        <p><strong>Root Cause:</strong></p>
+
+        <p>
+            Just-In-Time activation window had expired and the role automatically returned
+            to an Eligible state.
+        </p>
+
+        <p><strong>Resolution:</strong></p>
+
+        <p>
+            Re-activated the role through Microsoft Entra PIM and validated privileged
+            administrative functionality.
+        </p>
+
+    </div>
+
+    <div class="phase-card">
+
+        <h3>Issue 3 – Access Governance Decisions</h3>
+
+        <p><strong>Problem:</strong></p>
+
+        <p>
+            Determining whether long-standing group memberships were still required.
+        </p>
+
+        <p><strong>Resolution:</strong></p>
+
+        <p>
+            Access Reviews were implemented to support periodic access certification
+            and governance-driven decisions.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section id="engineering-takeaways">
+
+    <h2>9. Engineering Takeaways</h2>
+
+    <ul>
+        <li>IAM is not only user creation; it includes lifecycle management, governance, access validation, privileged access, and reporting.</li>
+
+        <li>RBAC should be designed before permissions are assigned so access can scale through groups instead of individual user assignments.</li>
+
+        <li>Joiner, Mover, and Leaver processes reduce security risk by ensuring access is granted, changed, and removed based on business role.</li>
+
+        <li>Licensing is a critical part of onboarding because a user account alone does not guarantee access to Microsoft 365 services.</li>
+
+        <li>Microsoft Entra PIM reduces standing privilege by allowing administrators to activate roles only when needed.</li>
+
+        <li>Access Reviews help detect stale access and support ongoing least-privilege governance.</li>
+
+        <li>Enterprise application access should be controlled using security groups to simplify authorization and improve auditability.</li>
+
+        <li>Microsoft Graph PowerShell reporting improves IAM visibility by auditing users, licenses, and group memberships.</li>
+
+        <li>A complete IAM model combines RBAC, JML, PIM, Access Reviews, application access control, and audit reporting.</li>
+    </ul>
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Francis Otoo. All rights reserved.</p>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>

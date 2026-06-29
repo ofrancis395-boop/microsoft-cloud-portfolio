@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Identity Transformation | Francis Otoo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Hybrid Identity Transformation</h1>
+    <button class="mobile-menu-button" onclick="toggleMobileMenu()">
+    ☰ Menu
+</button>
+    <nav id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Me</a>
+        <a href="hybrid-identity-transformation.html" class="active">Hybrid Identity</a>
+        <a href="iam-transformation.html">IAM</a>
+        <a href="powershell.html">Automation</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<aside class="toc">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#project-overview">1. Project Overview</a></li>
+        <li><a href="#technologies-used">2. Technologies Used</a></li>
+        <li><a href="#business-problem">3. The Business Problem</a></li>
+        <li><a href="#solution-architecture-design">4. Solution Architecture & Design</a></li>
+        <li><a href="#implementation-phases">5. Implementation Phases</a></li>
+        <li><a href="#technical-evidence">6. Technical Evidence</a></li>
+        <li><a href="#validation-testing">7. Validation & Testing</a></li>
+        <li><a href="#engineering-takeaways">8. Engineering Takeaways</a></li>
+    </ul>
+</aside>
+
+<main class="container">
+
+    
+        
+        <section id="project-overview">
+    <p class="case-study-label">CASE STUDY</p>
+
+    <h2>1. Project Overview</h2>
+
+    <h3>Hybrid Identity Transformation: From Active Directory to Modern Endpoint Management</h3>
+
+    <div class="project-meta">
+        <p><strong>Business Scenario:</strong> SweetCrust Bakery Ltd — 20 Employee Small Business</p>
+        <p><strong>Project Type:</strong> Hybrid Identity & Endpoint Modernization</p>
+        <p><strong>Role Alignment:</strong> Systems Administrator | IAM Analyst | Microsoft 365 Administrator | Endpoint Administrator</p>
+    </div>
+
+    <p>
+        This case study demonstrates how a small business can be managed using the same identity,
+        access, endpoint, and cloud management technologies commonly used in medium and large enterprise
+        environments.
+    </p>
+
+    <p>
+        SweetCrust Bakery Ltd represents a 20-employee pastry business operating across production,
+        sales, finance, and management functions. The business required centralized identity management,
+        secure cloud integration, modern endpoint management, and a scalable foundation for Microsoft 365
+        adoption.
+    </p>
+
+    <p>
+        Although the scenario is based on a small business, the implementation pattern reflects an
+        enterprise-ready architecture: Active Directory Domain Services for on-premises identity,
+        Microsoft Entra Connect for hybrid synchronization, Microsoft Entra ID for cloud identity,
+        and Microsoft Intune for modern endpoint management.
+    </p>
+
+    <p>
+        The goal of this project was to demonstrate a realistic transformation journey from traditional
+        on-premises identity management to a cloud-integrated Microsoft ecosystem.
+    </p>
+</section>
+
+
+
+
+<section class="project-summary">
+
+    <h3>Project Summary</h3>
+
+    <div class="summary-grid">
+
+        <div class="summary-item">
+            <strong>Employees Supported</strong>
+            <span>20</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Windows Endpoints</strong>
+            <span>2</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Identity Platforms</strong>
+            <span>AD DS • Entra ID</span>
+        </div>
+
+        <div class="summary-item">
+            <strong>Management Platforms</strong>
+            <span>Intune • Microsoft 365</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+    <section id="technologies-used">
+        <h2>2. Technologies Used</h2>
+        <ul>
+            <li>Windows Server</li>
+            <li>Active Directory Domain Services (AD DS)</li>
+            <li>DNS</li>
+            <li>Group Policy</li>
+            <li>Windows 10</li>
+            <li>Windows 11</li>
+            <li>Microsoft Entra ID</li>
+            <li>Microsoft Entra Connect Sync</li>
+            <li>Microsoft Intune</li>
+            <li>Microsoft 365</li>
+            <li>Conditional Access</li>
+            <li>Windows Autopilot</li>
+        </ul>
+    </section>
+
+    <section id="business-problem">
+        <h2>3. The Business Problem</h2>
+        <p>
+            SweetCrust Bakery Ltd required a centralized and scalable way to manage employee identities,
+            Windows devices, access control, and Microsoft 365 services.
+        </p>
+        <p>
+            As the business expanded, manual user creation, inconsistent device setup, and lack of
+            centralized security controls created operational and security challenges.
+        </p>
+        <ul>
+            <li>Employee accounts needed to be managed consistently.</li>
+            <li>Windows devices required centralized authentication and policy control.</li>
+            <li>The business needed a path from on-premises identity to cloud identity.</li>
+            <li>Remote and hybrid work required cloud-based endpoint management.</li>
+            <li>Access to Microsoft 365 services needed to be secured and governed.</li>
+        </ul>
+    </section>
+
+    <section id="solution-architecture-design">
+        <h2>4. Solution Architecture & Design</h2>
+        <p>
+            The solution was designed as a staged transformation: first establishing an on-premises
+            Active Directory environment, then extending identity into Microsoft Entra ID, and finally
+            managing endpoints through Microsoft Intune.
+        </p>
+
+
+
+<div class="architecture-flow">
+
+    <div class="arch-box">
+        <strong>SweetCrust Bakery Ltd</strong>
+        <span>20-employee business environment</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Windows Server</strong>
+        <span>Core on-premises infrastructure</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Active Directory Domain Services</strong>
+        <span>Users, groups, DNS, authentication, Group Policy</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Microsoft Entra Connect Sync</strong>
+        <span>Synchronizes on-premises identities to the cloud</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Microsoft Entra ID</strong>
+        <span>Cloud identity, Microsoft 365 access, Conditional Access</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Microsoft Intune</strong>
+        <span>Endpoint enrollment, compliance, app deployment, device security</span>
+    </div>
+
+    <div class="arch-arrow">↓</div>
+
+    <div class="arch-box">
+        <strong>Managed Windows 10 / Windows 11 Endpoints</strong>
+        <span>Corporate devices managed from the cloud</span>
+    </div>
+
+</div>
+
+
+
+        <p>
+            This architecture mirrors how many small and medium-sized organizations modernize their
+            identity and endpoint environment without immediately abandoning existing on-premises
+            infrastructure.
+        </p>
+    </section>
+
+    <section id="implementation-phases">
+        <h2>5. Implementation Phases</h2>
+
+        <h3>Phase 1: On-Premises Identity Foundation</h3>
+        <p>
+            Built the initial Active Directory environment using Windows Server, configured DNS,
+            created users and groups, joined a Windows client to the domain, and validated Group Policy.
+        </p>
+        <p>
+            <a href="labs.html">View Phase 1 Detailed Implementation</a>
+        </p>
+
+        <h3>Phase 2: Hybrid Directory Synchronization</h3>
+        <p>
+            Extended the on-premises Active Directory environment into Microsoft Entra ID using
+            Microsoft Entra Connect Sync, enabling synchronized identities and hybrid cloud access.
+        </p>
+        <p>
+            <a href="cloud/hybrid.html">View Phase 2 Detailed Implementation</a>
+        </p>
+
+        <h3>Phase 3: Modern Endpoint Management</h3>
+        <p>
+            Transitioned device management into the cloud using Microsoft Intune, including Windows
+            enrollment, Autopilot, compliance policies, Conditional Access, application deployment,
+            and endpoint security controls.
+        </p>
+        <p>
+            <a href="cloud/intune.html">View Phase 3 Detailed Implementation</a>
+        </p>
+    </section>
+
+    <section id="technical-evidence">
+        <h2>6. Technical Evidence</h2>
+        <p>
+            Technical evidence is organized across the detailed implementation pages. Each phase includes
+            screenshots showing configuration, validation, and endpoint behavior.
+        </p>
+        <ul>
+            <li>Active Directory deployment and domain controller configuration</li>
+            <li>Domain join and user authentication validation</li>
+            <li>Entra Connect installation and directory synchronization</li>
+            <li>Hybrid join verification on Windows 10 and Windows 11</li>
+            <li>Intune enrollment, compliance, Conditional Access, and application deployment</li>
+        </ul>
+    </section>
+
+    <section id="validation-testing">
+        <h2>7. Validation & Testing</h2>
+        <ul>
+            <li>Confirmed Windows client domain join using delegated credentials.</li>
+            <li>Validated user authentication against Active Directory.</li>
+            <li>Verified Group Policy application using <code>gpupdate</code> and <code>gpresult</code>.</li>
+            <li>Confirmed user synchronization into Microsoft Entra ID.</li>
+            <li>Verified hybrid join state using <code>dsregcmd /status</code>.</li>
+            <li>Validated Intune enrollment and endpoint compliance reporting.</li>
+            <li>Tested Conditional Access enforcement against device compliance state.</li>
+        </ul>
+    </section>
+
+    <section id="engineering-takeaways">
+        <h2>8. Engineering Takeaways</h2>
+        <ul>
+            <li>
+                Hybrid identity provides a practical migration path for organizations moving from
+                traditional Active Directory to Microsoft cloud services.
+            </li>
+            <li>
+                Active Directory remains important in many environments, but Entra ID and Intune enable
+                modern identity and endpoint management beyond the local network.
+            </li>
+            <li>
+                Group Policy and Intune configuration profiles solve similar problems, but Intune extends
+                management to cloud-connected and remote devices.
+            </li>
+            <li>
+                Conditional Access becomes more powerful when identity, device compliance, and endpoint
+                management are connected.
+            </li>
+            <li>
+                A phased transformation approach reduces risk by modernizing identity and endpoint
+                management without immediately discarding existing infrastructure.
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <p>© 2026 Francis Otoo. All rights reserved.</p>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("open");
+}
+</script>
+
+</body>
+</html>
