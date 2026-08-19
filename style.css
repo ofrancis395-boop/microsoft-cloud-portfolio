@@ -806,10 +806,7 @@ main ul li {
         float: none !important; /* Clears any desktop floating rules */
     }
 
-    /* --- ADD THIS: Smooth Transition Animation for the X Menu Button --- */
-    .mobile-menu-button {
-        transition: all 0.3s ease-in-out;
-    }
+    
 
     main,
     main.container,
